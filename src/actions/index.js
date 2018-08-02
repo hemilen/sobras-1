@@ -6,3 +6,10 @@ export const client = axios.create({
     "Content-Type": "application/json"
   }
 })
+
+export const sobras = axios.create({
+  baseURL: "http://localhost:8000",
+  headers: {
+    "Content-Type": "application/json"
+  }
+})

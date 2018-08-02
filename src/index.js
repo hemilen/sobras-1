@@ -19,9 +19,10 @@ import store from './store';
 import HomeLayout from './layouts/homeLayout/HomeLayout';
 
 // Pages
-import FormRedux from './pages/exemplo-redux-form';
-import App from './pages/app/App';
+// import FormRedux from './pages/exemplo-redux-form';
+// import App from './pages/app/App';
 import Sobras from './pages/sobras/Sobras';
+import User from './pages/user/User';
 
 
 
@@ -47,9 +48,11 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <Switch>
-                <RouteWithLayout exact path="/" component={App}/>
-                <RouteWithLayout path="/redux-form" component={FormRedux}/>
-                <RouteWithLayout path="/sobras" layout={HomeLayout} component={Sobras}/>
+                {/* <RouteWithLayout exact path="/" component={App}/> */}
+                {/* <RouteWithLayout path="/redux-form" component={FormRedux}/> */}
+                <RouteWithLayout exact path="/" layout={HomeLayout} component={Sobras}/>
+                <RouteWithLayout path="/users" layout={HomeLayout} component={User}/>
+
                     
             </Switch>
         </Router>

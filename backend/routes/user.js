@@ -12,9 +12,19 @@ module.exports = {
         var Controller = require('../controller/user');
         var controller = new Controller();
 
+
+        // CORS on ExpressJS - Matheus Piaui
+        app.use(function(req, res, next) {
+            res.header('Access-Control-Allow-Methods','GET,POST,PUT,DELETE,OPTIONS')
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+        });
+
+
         // adding route for object, here app is express instance which provide use
         // get method for handling get request from http server. 
-        app.get('/rest/users', function (req, res) {
+        app.get('/rest/users', function (req, res, next) {
             controller.getAll(res);
         });
 
@@ -54,7 +64,7 @@ module.exports = {
         });
 
         // here we update an object.
-        app.put('/rest/user', function (req, res) {
+        app.put('/rest/user', function (req, res, next) {
             controller.update(req, res);
         });
 

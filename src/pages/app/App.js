@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+// Redux
 import { connect } from 'react-redux';
 import { fetchContacts, deleteContact } from '../../actions/contact-actions';
 import { newContact, saveContact, fetchContact, updateContact} from '../../actions/contact-actions';

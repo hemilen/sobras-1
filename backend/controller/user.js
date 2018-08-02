@@ -8,7 +8,7 @@ var User         = require('../entity/user.js');
 var bCrypt       = require('bcrypt-nodejs');
 
 function UserController() {
-    var Persistence  = require('../persistence/User.js');
+    var Persistence  = require('../persistence/user.js');
     var persistence  = new Persistence();
     
     // get all objects data 
@@ -78,7 +78,7 @@ function UserController() {
             }),
 
             new Promise((resolve, reject)=>{
-                persistence.isNameInUse(req.body.email, res)
+                persistence.isEmailInUse(req.body.email, res)
                 .then(
                     // resolve
                     (data) => {
