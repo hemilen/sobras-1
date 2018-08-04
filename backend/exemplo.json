@@ -1,0 +1,134 @@
+// Casos de Sucesso - 200,201,204,206
+// GET
+// .../rest/user/ => getUserAll() 
+{
+    "status": "ok",
+    "code": 200,
+    "messages": [
+        {
+            "msg": "Sucesso na busca!"
+        }
+    ],
+    "result": {
+        "users": [
+            {
+                "id": 123,
+                "name": "matheus"
+            },
+            {
+                "id": 124,
+                "name": "helen"
+            },
+            {
+                "id": 125,
+                "name": "miguel"
+            }
+        ]
+    }
+}
+// GET
+// .../rest/user/:id    =>  getUser(id)
+{
+    "status": "ok",
+    "code": 200,
+    "messages": [
+        {
+            "msg": "Sucesso na busca!"
+        }
+    ],
+    "result": {
+        "user": {
+            "id": 123,
+            "name": "matheus"
+        }
+    }
+}
+// POST
+// .../rest/user/    =>  addUser(obj)
+{
+    "status": "created",
+    "code": 201, // recurso Criado
+    "messages": [
+        {
+            "msg": "Sucesso na busca!"
+        }
+    ],
+    "result": {
+        "user": { // user Adicionado
+            "id": 123,
+            "name": "matheus"
+        }
+    }
+}
+// PUT
+// .../rest/user/    =>  updateUser(obj)
+{
+    "status": "ok",
+    "code": 200,
+    "messages": [
+        {
+            "msg": "Usuário alterado com sucesso!"
+        }
+    ],
+    "result": {
+        "user": { // user Adicionado
+            "id": 123,
+            "name": "matheus"
+        }
+    }
+}
+// DELETE
+// .../rest/user/:id   =>  removeUser(id)
+{
+    "status": "no content",
+    "code": 204, // Não há retorno(result)
+    "messages": [
+        {
+            "msg": "Usuário excluido com sucesso!"
+        }
+    ],
+    "result": {}
+}
+// --------------------------------------------------------------
+// Casos de Erro - 400,401,403,404
+// GET, POST, PUT ou DELETE
+// .../rest/user/ => getUserAll()
+// Sem autenticação ou permissão insuficiente
+{
+    "status": "unauthorized",
+    "code": 401, // não autorizado
+    "messages": [
+        {
+            "msg": "Falha de autenticação!"
+        }
+    ],
+    "result": {}
+}
+// POST ou PUT
+// .../rest/user/       =>  addUser(obj)  
+//                  ou
+// .../rest/user/:id    =>  updateUser(id)   
+{
+    "status": "bad request",
+    "code": 400, // erro de validação
+    "messages": [
+        {
+            "msg": "Email já cadastrado!"
+        },
+        {
+            "msg": "Nome precisa ser informado!"
+        },
+        {
+            "msg": "Data de nascimento precisa ser informada!"
+        }
+    ],
+    "result": {}
+}
+// DELETE
+// .../rest/user/:id    =>  removeUser(id)
+{
+    "status": "not found",
+    "code": 404, // Não exite recurso. Ex.: id não existe
+    "messages": [],
+    "result": {}
+}

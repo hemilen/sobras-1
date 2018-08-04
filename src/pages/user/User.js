@@ -96,7 +96,11 @@ class User extends Component {
                     width="600px"
                     title="Form User"
                 >
-                
+                    {
+                        this.props.errors.map((err) => (
+                            <span key={err.param}>{err.msg}</span>
+                        ))
+                    }
                     <UserForm user={this.props.user} onSubmit={this.submit} loading={this.props.loading.toString()} />
                     
                 </DialogContainer>

@@ -2,7 +2,7 @@ const defaultState = {
   users: [],
   user: {},
   loading: false,
-  errors:{}
+  errors:[]
 }
 
 export default (state=defaultState, action={}) => {
@@ -12,7 +12,7 @@ export default (state=defaultState, action={}) => {
         ...state,
         users: action.payload.data,
         loading: false,
-        errors: {}
+        errors: []
       }
     }
 
@@ -20,7 +20,7 @@ export default (state=defaultState, action={}) => {
       return {
         ...state,
         loading: true,
-        errors: {}
+        errors: []
       }
     }
 
@@ -50,7 +50,7 @@ export default (state=defaultState, action={}) => {
       return {
         ...state,
         users: [...state.users, action.payload.data],
-        errors: {},
+        errors: [],
         loading: false
       }
     }
@@ -58,11 +58,13 @@ export default (state=defaultState, action={}) => {
     case 'SAVE_USER_REJECTED': {
       const data = action.payload.response.data;
       // convert feathers error formatting to match client-side error formatting
-      const { "name.first":first, "name.last":last, phone, email } = data.errors;
-      const errors = { global: data.message, name: { first,last }, phone, email };
+      // const { "name.first":first, "name.last":last, phone, email } = data.errors;
+      // const errors = { global: data.message, name: { first,last }, phone, email };
+      // console.log(data);
+      
       return {
         ...state,
-        errors: errors,
+        errors: data,
         loading: false
       }
     }
@@ -79,7 +81,7 @@ export default (state=defaultState, action={}) => {
       return {
         ...state,
         user: action.payload.data[0],
-        errors: {},
+        errors: [],
         loading: false
       }
     }
@@ -96,7 +98,7 @@ export default (state=defaultState, action={}) => {
       return {
         ...state,
         users: state.users.map(item => item.id === user.id ? user : item),
-        errors: {},
+        errors: [],
         loading: false
       }
     }
