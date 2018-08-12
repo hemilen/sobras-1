@@ -24,7 +24,7 @@ module.exports = {
 
         // adding route for object, here app is express instance which provide use
         // get method for handling get request from http server. 
-        app.get('/rest/users', function (req, res, next) {
+        app.get('/rest/user', function (req, res) {
             controller.getAll(res);
         });
 
@@ -34,27 +34,27 @@ module.exports = {
         });
 
         // here we gets email from request and passing to it object method.
-        app.get('/rest/userbyemail/:email/', function (req, res) {
+        app.get('/rest/user/email/:email/', function (req, res) {
             controller.getByEmail(req, res);
         });
 
         // here we gets birthDate from request and passing to it object method.
-        app.get('/rest/userbybirthdate/:birthDay/', function (req, res) {
+        app.get('/rest/user/birthdate/:birthDay/', function (req, res) {
             controller.getByBirthDate(req, res);
         });
 
         // here we gets email from request and passing to it object method.
-        app.get('/rest/userqttbyemail/:email/', function (req, res) {
+        app.get('/rest/user/qtt/email/:email/', function (req, res) {
             controller.getQttByEmail(req, res);
         });
 
         // here we gets birthDate from request and passing to it object method.
-        app.get('/rest/userqttbybirthdate/:birthDate/', function (req, res) {
+        app.get('/rest/user/qtt/birthdate/:birthDay/', function (req, res) {
             controller.getQttByBirthDate(req, res);
         });
 
         // here we gets email from request and passing to it object method.
-        app.get('/rest/userisnameinuse/:name/', function (req, res) {
+        app.get('/rest/user/inuse/email/:email/', function (req, res) {
             controller.isEmailInUse(req.params.email, res);
         });
 
@@ -64,8 +64,8 @@ module.exports = {
         });
 
         // here we update an object.
-        app.put('/rest/user', function (req, res, next) {
-            controller.update(req, res);
+        app.put('/rest/user/:id', function (req, res) {
+            controller.update(req.params.id, req, res);
         });
 
         // here we delete an object passing id to it object method.

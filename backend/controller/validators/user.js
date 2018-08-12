@@ -16,37 +16,25 @@ UserValidator.prototype.checkBody = (req, res) => {
     var error;
 
     if(!req.body){
-        error  = {  location: 'body', 
-                    param:    'body', 
-                    msg:      'Body must not be null', 
-                    value:     req.body };
+        error  = {  msg:      'Body must not be null'};
 
         errors.push(error);
     }
 
     if(!req.body.name){
-        error  = {  location: 'body', 
-                    param:    'name', 
-                    msg:      'Nome deve ser informado', 
-                    value:     req.body.name };
+        error  = {  msg:      'Nome deve ser informado'};
 
         errors.push(error);
     }
 
     req.assert(req.email, 'Email invalido').isEmail();
     if(!req.body.email){
-        error  = {  location: 'body', 
-                    param:    'email', 
-                    msg:      'Email deve ser informado', 
-                    value:     req.body.email };
+        error  = {  msg:      'Email deve ser informado'};
 
         errors.push(error);
     }
     if(!req.body.password){
-        error  = {  location: 'body', 
-                    param:    'password', 
-                    msg:      'Senha deve ser informada', 
-                    value:     req.body.password };
+        error  = {  msg:      'Senha deve ser informada'};
 
         errors.push(error);
     }

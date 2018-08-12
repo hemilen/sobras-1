@@ -5,7 +5,17 @@
 */
 //methods for fetching mysql data
 
-var Error        = require('../../entity/error.js');
+var Error = require('../../entity/error.js');
+var Resposta = require('../../entity/resposta.js');
+
+var params = {
+    status: "ok",
+    code: 200,
+    messages: [],
+    result: {}
+};
+
+var params = new Resposta(params);
 
 function UserPersistenceSequelize() {
 
@@ -27,7 +37,7 @@ function UserPersistenceSequelize() {
                     }
                 ],
                 */
-                attributes:  { exclude: ['password'] },
+                attributes: { exclude: ['password'] },
 
                 // Add order conditions here....
                 order: [
@@ -35,7 +45,11 @@ function UserPersistenceSequelize() {
                 ]
             })
             .then(object => {
-                res.send(JSON.parse(JSON.stringify(object)));
+                params.messages = [{
+                    msg: "Sucesso na busca"
+                }];
+                params.result = { users: object };
+                res.send(params);
             }); // fim .then(object => {
     }; // fim this.getAll
 
@@ -59,10 +73,21 @@ function UserPersistenceSequelize() {
                     }
                 ]
                 */
-               attributes:  { exclude: ['password'] }
+                attributes: { exclude: ['password'] }
             })
             .then(object => {
-                res.send(JSON.parse(JSON.stringify(object)));
+                params.messages = [{
+                    msg: "Sucesso na busca"
+                }];
+                params.result = { user: object[0] };
+                // params.result = object;
+                res.send(params);
+            }).catch(() => {
+                params.status = "not found";
+                params.code = 404;
+                params.messages = [];
+                params.result = {};
+                res.status(404).send(params);
             });
     }; // fim this.getById
 
@@ -86,10 +111,14 @@ function UserPersistenceSequelize() {
                     }
                 ]
                 */
-               attributes:  { exclude: ['password'] }
+                attributes: { exclude: ['password'] }
             })
             .then(object => {
-                res.send(JSON.parse(JSON.stringify(object)));
+                params.messages = [{
+                    msg: "Sucesso na busca"
+                }];
+                params.result = { user: object[0] };
+                res.send(params);
             });
     }; // fim this.getByEmail
 
@@ -116,7 +145,11 @@ function UserPersistenceSequelize() {
                 */
             })
             .then(object => {
-                res.send(JSON.parse(JSON.stringify(object)));
+                params.messages = [{
+                    msg: "Sucesso na busca"
+                }];
+                params.result = { user: object };
+                res.send(params);
             });
     }; // fim this.getByBirthDate
 
@@ -132,17 +165,17 @@ function UserPersistenceSequelize() {
                         resolve(qtt);
                     }
                 )// fim do then
-                .catch( 
-                    function ( erro ) {
+                .catch(
+                    function (erro) {
                         var params = {
-                            code:     500,
-                            message:  'Erro ao buscar usuário por email',
+                            code: 500,
+                            message: 'Erro ao buscar usuário por email',
                             response: erro
                         };
 
-                       var error = new Error(params);
-                       reject(new Error (error));
-                   }    
+                        var error = new Error(params);
+                        reject(new Error(error));
+                    }
                 );// fim do catch
         });   // Closing of Promise block
     }; // fim this.getQttByEmail
@@ -159,16 +192,16 @@ function UserPersistenceSequelize() {
                         resolve(qtt);
                     }
                 )// fim do then
-                .catch( 
-                    function ( erro ) {
+                .catch(
+                    function (erro) {
                         var params = {
-                            code:     500,
-                            message:  'Erro ao buscar qtde de usuário por data de nascimento',
+                            code: 500,
+                            message: 'Erro ao buscar qtde de usuário por data de nascimento',
                             response: erro
                         };
 
-                       var error = new Error(params);
-                       reject(new Error (error));
+                        var error = new Error(params);
+                        reject(new Error(error));
                     }
                 );// fim do catch
         });   // Closing of Promise block
@@ -181,20 +214,20 @@ function UserPersistenceSequelize() {
             var isEmailInUse = false;
 
             this.getQttByEmail(db, email, res)
-            .then(
-                //resolve
-                (qtt) => {
-                    if   (qtt == 0)
-                         isEmailInUse = false;
-                    else isEmailInUse = true;
+                .then(
+                    //resolve
+                    (qtt) => {
+                        if (qtt == 0)
+                            isEmailInUse = false;
+                        else isEmailInUse = true;
 
-                    resolve(isEmailInUse);
-                }, // fim do resolve getQttByEmail
-                // reject
-                function ( erro ) {
-                    reject (erro);
-                }// fim do reject getQttByEmail
-            )// fim do then
+                        resolve(isEmailInUse);
+                    }, // fim do resolve getQttByEmail
+                    // reject
+                    function (erro) {
+                        reject(erro);
+                    }// fim do reject getQttByEmail
+                )// fim do then
         });   // Closing of Promise block
     }; // fim this.isEmailInUse
 
@@ -204,24 +237,34 @@ function UserPersistenceSequelize() {
         db.user
             .create(object)
             .then(function (addedRecord) {
-                var params = {
-                    code:     200,
-                    message:  'OK',
-                    response: 'Record is successfully added.'
+                params = {
+                    status: "created",
+                    code: 201,
+                    messages: [{
+                        msg: "Adicionado com sucesso"
+                    }],
+                    result: {
+                        user: addedRecord.dataValues
+                    }
                 };
 
-                var error = new Error(params);
-                res.json({error});
+                res.send(new Resposta(params));
+
             })
             .catch(function (err) {
-                var params = {
-                    code:     500,
-                    message:  'Erro ao incluir usuário',
-                    response: err
+                params = {
+                    status: "internal server error",
+                    code: 500,
+                    messages: [{
+                        msg: "Erro interno"
+                    }, {
+                        msg: err.toString()
+                    }],
+                    result: {}
                 };
 
-                var error = new Error(params);
-                res.json({error});
+                res.status(500).send(new Resposta(params));
+
             });
     }; // fim this.add
 
@@ -230,29 +273,39 @@ function UserPersistenceSequelize() {
         // get object as parameter to passing into query and return filter data
         db.user
             .update(object, {
+                returning: true,
                 where: {
                     id: object.id
-                }
+                },
+                validate: true,
             })
-            .then(function (updatedRecord) {
-                var params = {
-                    code:     200,
-                    message:  'OK',
-                    response: 'Record is successfully updated.'
+            .then(updatedBook => {
+                params = {
+                    status: "ok",
+                    code: 200,
+                    messages: [{
+                        msg: "Alterado com sucesso"
+                    }],
+                    result: {
+                        user: updatedBook
+                    }
                 };
 
-                var error = new Error(params);
-                res.json({error});
+                res.send(new Resposta(params));
             })
             .catch(function (err) {
-                var params = {
-                    code:     500,
-                    message:  'Erro ao alterar usuário',
-                    response: err
+                params = {
+                    status: "internal server error",
+                    code: 500,
+                    messages: [{
+                        msg: "Erro interno"
+                    }, {
+                        msg: err.toString()
+                    }],
+                    result: {}
                 };
 
-                var error = new Error(params);
-                res.json({error});
+                res.status(500).send(new Resposta(params));
             });
     }; // fim this.update
 
@@ -266,34 +319,41 @@ function UserPersistenceSequelize() {
                 }
             })
             .then(function (deletedRecord) {
+                
+
                 if (deletedRecord === 1) {
-                    code     = 200;
-                    message  = 'OK';
-                    response = 'Record is successfully deleted.';
+                    params = {
+                        status: "ok",
+                        code: 200,
+                        messages: [{
+                            msg: "Deletado com sucesso"
+                        }],
+                        result: {}
+                    };
                 }
                 else {
-                    code     = 404;
-                    message  = 'OK';
-                    response = 'Record not found.';
+                    params = {
+                        status: "not found",
+                        code: 404,
+                        messages: [{
+                            msg: "Erro de deletar, verifique id"
+                        }],
+                        result: {}
+                    };
                 }
-                var params = {
-                    code:     code,
-                    message:  message,
-                    response: response
-                };
 
-                var error = new Error(params);
-                res.json({error});
+                res.send(new Resposta(params));
+
             })
             .catch(function (err) {
                 var params = {
-                    code:     500,
-                    message:  'Erro ao excluir',
+                    code: 500,
+                    message: 'Erro ao excluir',
                     response: err
                 };
 
                 var error = new Error(params);
-                res.json({error});
+                res.json({ error });
             });
 
     }; // fim this.deleteById

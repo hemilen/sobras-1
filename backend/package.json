@@ -18,11 +18,13 @@
     "sql-injection": "^0.0.6"
   },
   "devDependencies": {
-    "firebase": "^5.2.0"
+    "firebase": "^5.2.0",
+    "nodemon": "^1.18.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "start-node": "nodemon server.js"
   },
   "author": "Helen de Freitas Santos",
   "license": "ISC"
